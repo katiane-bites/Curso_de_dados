@@ -1,0 +1,28 @@
+# Dockerfile para ambiente ETL com Python + PostgreSQL + SQLALchemy
+FROM python:3.10-slim
+
+#Instalar dependencias do sistema
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Definir diretório de trabalho
+WORKDIR /app
+
+# Copiar arquivos do projeto
+COPY requirements.txt ./
+COPY srag_2021.csv ./
+
+# Instalar dependencias Pyton
+RUN pip install --no-cache-dir -r requirements.txt
+
+#Copiar arquivos do projeto
+COPY etl_srag.py ./
+
+#Comando padrao
+CMD ["python", "etl_srag.py"]
+
+
+
